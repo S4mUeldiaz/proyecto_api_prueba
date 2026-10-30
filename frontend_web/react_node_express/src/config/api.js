@@ -1,6 +1,6 @@
 // src/config/api.js
 const API_CONFIG = {
-  BASE_URL: 'http://172.24.16.1:3000/api',
+  BASE_URL: 'http://192.168.80.19:3000/api',
   TIMEOUT: 10000,
   ENDPOINTS: {
     LOGIN: '/users/login',

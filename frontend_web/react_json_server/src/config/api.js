@@ -1,6 +1,6 @@
 // src/config/api.js
 const API_CONFIG = {
-  BASE_URL: 'http://localhost:3000', // Tu JSON Server en puerto 3000
+  BASE_URL: 'http://192.168.80.19:3000', // Tu JSON Server en puerto 3000
   TIMEOUT: 10000,
   ENDPOINTS: {
     LOGIN: '/login',     // Este endpoint puede no existir en JSON Server
