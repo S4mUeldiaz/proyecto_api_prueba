@@ -33,7 +33,7 @@ describe('Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente', () => 
     const emailVendedor = `vendedor_${Date.now()}@test.com`;
     cy.request({
       method: 'POST',
-      url: 'http://10.1.195.158:3000/api/users/create', // 👈 Asegúrese de usar su IP correcta
+      url: 'http://192.168.80.19:3000/api/users/create', // 👈 Asegúrese de usar su IP correcta
       body: { 
         name: "Vendedor", 
         lastname: "Test", 
@@ -76,7 +76,7 @@ describe('Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente', () => 
     const emailPersistente = `persistente_${Date.now()}@test.com`;
     cy.request({
       method: 'POST',
-      url: 'http://10.1.195.158:3000/api/users/create', // 👈 Asegúrese de usar su IP correcta
+      url: 'http://192.168.80.19:3000/api/users/create', // 👈 Asegúrese de usar su IP correcta
       body: { name: "Persistente", lastname: "Test", email: emailPersistente, password: "123" }
     });
 

@@ -81,7 +81,7 @@ module.exports = {
   },
 
   getUserById(req, res) {
-    const id = req.params.id;
+    const id = req.body.id;
     User.findById(id, (err, user) => {
       if (err) {
         return res.status(501).json({
@@ -131,7 +131,7 @@ module.exports = {
   // ACTUALIZADO: getUserUpdate con manejo correcto del ID
   getUserUpdate(req, res) {
     const user = req.body;
-    const id = req.params.id;  // Obtener ID de los parámetros de la URL
+    const id = req.body.id;  // Obtener ID de los parámetros de la URL
     
     // Agregar el ID al objeto user
     user.id = id;

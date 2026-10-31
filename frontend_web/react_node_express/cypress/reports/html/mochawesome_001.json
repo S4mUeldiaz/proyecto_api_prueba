@@ -1,0 +1,186 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 4,
+    "pending": 0,
+    "failures": 1,
+    "start": "2026-10-31T03:52:41.408Z",
+    "end": "2026-10-31T03:52:51.440Z",
+    "duration": 10032,
+    "testsRegistered": 5,
+    "passPercent": 80,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "855e6d1d-81d7-4919-bdba-ab4788db0ed9",
+      "title": "",
+      "fullFile": "cypress\\e2e\\system\\users.system.cy.js",
+      "file": "cypress\\e2e\\system\\users.system.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "36fc9c5e-2a3b-4681-869a-8b6caf4bc902",
+          "title": "Nivel 4: Pruebas de Sistema (E2E) - Flujos Completos",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "ST-01: Debe permitir el login y redirigir al Dashboard",
+              "fullTitle": "Nivel 4: Pruebas de Sistema (E2E) - Flujos Completos ST-01: Debe permitir el login y redirigir al Dashboard",
+              "timedOut": null,
+              "duration": 1670,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/login');\ncy.get('input[type=\"email\"]').type('admin@test.com');\ncy.get('input[type=\"password\"]').type('password123'); // 👈 Reemplace con su contraseña\ncy.get('button[type=\"submit\"]').click();\ncy.url().should('include', '/dashboard');\ncy.contains('Bienvenido,').should('be.visible');",
+              "err": {},
+              "uuid": "26061a2a-29ee-4f32-9363-c09dc46e953e",
+              "parentUUID": "36fc9c5e-2a3b-4681-869a-8b6caf4bc902",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ST-02: Debe redirigir al login si se intenta acceder al Dashboard sin estar autenticado",
+              "fullTitle": "Nivel 4: Pruebas de Sistema (E2E) - Flujos Completos ST-02: Debe redirigir al login si se intenta acceder al Dashboard sin estar autenticado",
+              "timedOut": null,
+              "duration": 248,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.clearLocalStorage();\ncy.visit('/dashboard');\ncy.url().should('include', '/login');",
+              "err": {},
+              "uuid": "05470df2-b710-44b0-9b3f-d795a2ec7977",
+              "parentUUID": "36fc9c5e-2a3b-4681-869a-8b6caf4bc902",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ST-03: Debe crear un usuario a través del formulario y mostrarlo en la tabla",
+              "fullTitle": "Nivel 4: Pruebas de Sistema (E2E) - Flujos Completos ST-03: Debe crear un usuario a través del formulario y mostrarlo en la tabla",
+              "timedOut": null,
+              "duration": 2837,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.login('admin@test.com', 'password123');\ncy.visit('/dashboard');\ncy.contains('button', 'Usuarios').click();\ncy.contains('button', '+ Nuevo Usuario').click();\nconst emailUnico = `cypress_${Date.now()}@test.com`;\ncy.get('input[name=\"name\"]').type('Usuario Creado por Cypress');\ncy.get('input[name=\"lastname\"]').type('ApellidoTest');\ncy.get('input[name=\"email\"]').type(emailUnico);\ncy.get('input[name=\"password\"]').type('password123');\ncy.get('input[name=\"confirmPassword\"]').type('password123');\ncy.contains('button', 'Crear').click();\ncy.contains('Operación completada exitosamente').should('be.visible');\ncy.get('table').should('contain', emailUnico);",
+              "err": {},
+              "uuid": "543a2e86-0c9f-4460-9613-d7491813b998",
+              "parentUUID": "36fc9c5e-2a3b-4681-869a-8b6caf4bc902",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ST-04: Debe eliminar un usuario de la tabla",
+              "fullTitle": "Nivel 4: Pruebas de Sistema (E2E) - Flujos Completos ST-04: Debe eliminar un usuario de la tabla",
+              "timedOut": null,
+              "duration": 1016,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.login('admin@test.com', 'password123');\ncy.visit('/dashboard');\ncy.contains('button', 'Usuarios').click();\nconst emailAEliminar = `eliminar_${Date.now()}@test.com`;\ncy.request({\n  method: 'POST',\n  url: 'http://localhost:3000/api/users/create',\n  // 👈 Asegúrese de usar su IP correcta\n  body: {\n    name: \"Para Borrar\",\n    lastname: \"Test\",\n    email: emailAEliminar,\n    password: \"123\"\n  }\n});\ncy.reload();\ncy.contains('button', 'Usuarios').click();\ncy.contains('tr', emailAEliminar).within(() => {\n  cy.get('button.btn-delete').click();\n});\ncy.on('window:confirm', () => true);\ncy.contains('Usuario eliminado exitosamente').should('be.visible');\ncy.get('table').should('not.contain', emailAEliminar);",
+              "err": {
+                "message": "CypressError: `cy.request()` failed trying to load:\n\nhttp://localhost:3000/api/users/create\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > AggregateError\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3000/api/users/create\n\n-----------------------------------------------------------\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed trying to load:\n\nhttp://localhost:3000/api/users/create\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > AggregateError\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3000/api/users/create\n\n-----------------------------------------------------------\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:134875:70)\n    at tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1780:23)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:4176:37)\n    at tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1780:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1492:31)\n    at Promise._settlePromise (http://localhost:5173/__cypress/runner/cypress_runner.js:1549:18)\n    at Promise._settlePromise0 (http://localhost:5173/__cypress/runner/cypress_runner.js:1594:10)\n    at Promise._settlePromises (http://localhost:5173/__cypress/runner/cypress_runner.js:1670:18)\n    at _drainQueueStep (http://localhost:5173/__cypress/runner/cypress_runner.js:2380:12)\n    at _drainQueue (http://localhost:5173/__cypress/runner/cypress_runner.js:2373:9)\n    at Async._drainQueues (http://localhost:5173/__cypress/runner/cypress_runner.js:2389:5)\n    at Async.drainQueues (http://localhost:5173/__cypress/runner/cypress_runner.js:2259:14)\nFrom Your Spec Code:\n    at Object.proxyGetter [as get] (http://localhost:5173/__cypress/runner/cypress_runner.js:81449:22)\n    at exists (http://localhost:5173/__cypress/runner/cypress_runner.js:151554:26)\n    at elExists (http://localhost:5173/__cypress/runner/cypress_runner.js:151569:10)\n    at ensureExistence (http://localhost:5173/__cypress/runner/cypress_runner.js:151750:22)\n    at onFailFn (http://localhost:5173/__cypress/runner/cypress_runner.js:151779:53)\n\nFrom Node.js Internals:\n  RequestError: AggregateError\n      at new l (<embedded>:275:86324)\n      at ee.callback (<embedded>:275:92325)\n      at e.callback.s.callback [as _callback] (<embedded>:275:91771)\n      at s._callback.s.callback.s.callback (<embedded>:338:99227)\n      at ee.emit (node:events:519:28)\n      at ee.onRequestError (<embedded>:338:108169)\n      at ClientRequest.emit (node:events:531:35)\n      at emitErrorEvent (node:_http_client:105:11)\n      at Socket.socketErrorListener (node:_http_client:518:5)\n      at Socket.emit (node:events:519:28)\n      at emitErrorNT (node:internal/streams/destroy:170:8)\n      at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n      at process.processTicksAndRejections (node:internal/process/task_queues:90:21)",
+                "diff": null
+              },
+              "uuid": "144c81e2-a4df-420f-8494-44a421a8668f",
+              "parentUUID": "36fc9c5e-2a3b-4681-869a-8b6caf4bc902",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ST-05: Debe mostrar un mensaje de error si se intenta hacer login con campos vacíos",
+              "fullTitle": "Nivel 4: Pruebas de Sistema (E2E) - Flujos Completos ST-05: Debe mostrar un mensaje de error si se intenta hacer login con campos vacíos",
+              "timedOut": null,
+              "duration": 3023,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/login');\ncy.get('button[type=\"submit\"]').click();\ncy.contains('Por favor complete todos los campos').should('be.visible');",
+              "err": {},
+              "uuid": "5ce8f5d1-b278-4063-a3f5-65f8895cabc9",
+              "parentUUID": "36fc9c5e-2a3b-4681-869a-8b6caf4bc902",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "26061a2a-29ee-4f32-9363-c09dc46e953e",
+            "05470df2-b710-44b0-9b3f-d795a2ec7977",
+            "543a2e86-0c9f-4460-9613-d7491813b998",
+            "5ce8f5d1-b278-4063-a3f5-65f8895cabc9"
+          ],
+          "failures": [
+            "144c81e2-a4df-420f-8494-44a421a8668f"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 8794,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "8.1.1"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/html",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}

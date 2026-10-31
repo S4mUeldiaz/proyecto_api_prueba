@@ -51,7 +51,7 @@ describe('Nivel 4: Pruebas de Sistema (E2E) - Flujos Completos', () => {
     const emailAEliminar = `eliminar_${Date.now()}@test.com`;
     cy.request({
       method: 'POST',
-      url: 'http://localhost:3000/api/users/create', // 👈 Asegúrese de usar su IP correcta
+      url: 'http://192.168.80.19:3000/api/users/create', // 👈 Asegúrese de usar su IP correcta
       body: { name: "Para Borrar", lastname: "Test", email: emailAEliminar, password: "123" }
     });
 

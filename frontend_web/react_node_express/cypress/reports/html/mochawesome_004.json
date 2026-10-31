@@ -1,0 +1,190 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 3,
+    "pending": 0,
+    "failures": 2,
+    "start": "2026-10-31T03:55:32.190Z",
+    "end": "2026-10-31T03:57:05.478Z",
+    "duration": 93288,
+    "testsRegistered": 5,
+    "passPercent": 60,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "73b384bc-0b09-4a96-8c50-9ebbd9f1d265",
+      "title": "",
+      "fullFile": "cypress\\e2e\\acceptance\\users.acceptance.cy.js",
+      "file": "cypress\\e2e\\acceptance\\users.acceptance.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "60139a96-a72a-4449-b2e7-4ca2f6c3805f",
+          "title": "Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "AT-01: El cliente debe poder registrarse y ver un mensaje de confirmación",
+              "fullTitle": "Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente AT-01: El cliente debe poder registrarse y ver un mensaje de confirmación",
+              "timedOut": null,
+              "duration": 4934,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/register');\n// Generamos datos únicos para el nuevo cliente\nconst emailCliente = `cliente_${Date.now()}@test.com`;\n// Llenamos el formulario de registro\ncy.get('input[name=\"name\"]').type('Cliente');\ncy.get('input[name=\"lastname\"]').type('Aceptacion');\ncy.get('input[name=\"email\"]').type(emailCliente);\ncy.get('input[name=\"phone\"]').type('3001234567');\ncy.get('input[name=\"password\"]').type('password123');\ncy.get('input[name=\"confirmPassword\"]').type('password123');\n// Por defecto el rol es 'user', así que lo dejamos así\ncy.get('button[type=\"submit\"]').click();\n// El sistema debe confirmar el registro (AlertMessage de éxito)\ncy.contains('Usuario registrado exitosamente').should('be.visible');\n// Y debe redirigir al login después de 2 segundos (según su código)\ncy.url().should('include', '/login', {\n  timeout: 5000\n});",
+              "err": {},
+              "uuid": "63f17943-d96a-4831-b545-265c994046eb",
+              "parentUUID": "60139a96-a72a-4449-b2e7-4ca2f6c3805f",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "AT-02: Un usuario con rol \"Vendedor\" no debe ver el botón de eliminar",
+              "fullTitle": "Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente AT-02: Un usuario con rol \"Vendedor\" no debe ver el botón de eliminar",
+              "timedOut": null,
+              "duration": 21190,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "// 1. Creamos un usuario vendedor por API para agilizar el test\nconst emailVendedor = `vendedor_${Date.now()}@test.com`;\ncy.request({\n  method: 'POST',\n  url: 'http://10.1.195.158:3000/api/users/create',\n  // 👈 Asegúrese de usar su IP correcta\n  body: {\n    name: \"Vendedor\",\n    lastname: \"Test\",\n    email: emailVendedor,\n    password: \"password123\",\n    role: \"seller\" // 👈 Forzamos el rol de vendedor\n  }\n});\n// 2. Hacemos login con ese vendedor\ncy.login(emailVendedor, 'password123');\ncy.visit('/dashboard');\ncy.contains('button', 'Usuarios').click();\n// 3. Buscamos el botón de eliminar en la tabla\n// Debe existir en el DOM, pero estar deshabilitado por la lógica de React (canDelete)\ncy.get('button.btn-delete').first().should('be.disabled');",
+              "err": {
+                "message": "CypressError: `cy.request()` failed trying to load:\n\nhttp://10.1.195.158:3000/api/users/create\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > Error: connect ETIMEDOUT 10.1.195.158:3000\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://10.1.195.158:3000/api/users/create\n\n-----------------------------------------------------------\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed trying to load:\n\nhttp://10.1.195.158:3000/api/users/create\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > Error: connect ETIMEDOUT 10.1.195.158:3000\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://10.1.195.158:3000/api/users/create\n\n-----------------------------------------------------------\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:134875:70)\n    at tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1780:23)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:4176:37)\n    at tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1780:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1492:31)\n    at Promise._settlePromise (http://localhost:5173/__cypress/runner/cypress_runner.js:1549:18)\n    at Promise._settlePromise0 (http://localhost:5173/__cypress/runner/cypress_runner.js:1594:10)\n    at Promise._settlePromises (http://localhost:5173/__cypress/runner/cypress_runner.js:1670:18)\n    at _drainQueueStep (http://localhost:5173/__cypress/runner/cypress_runner.js:2380:12)\n    at _drainQueue (http://localhost:5173/__cypress/runner/cypress_runner.js:2373:9)\n    at Async._drainQueues (http://localhost:5173/__cypress/runner/cypress_runner.js:2389:5)\n    at Async.drainQueues (http://localhost:5173/__cypress/runner/cypress_runner.js:2259:14)\nFrom Your Spec Code:\n    at Context.eval (webpack://sis-web-mvc/./cypress/e2e/acceptance/users.acceptance.cy.js:34:7)\n\nFrom Node.js Internals:\n  RequestError: Error: connect ETIMEDOUT 10.1.195.158:3000\n      at new l (<embedded>:275:86324)\n      at ee.callback (<embedded>:275:92325)\n      at e.callback.s.callback [as _callback] (<embedded>:275:91771)\n      at s._callback.s.callback.s.callback (<embedded>:338:99227)\n      at ee.emit (node:events:519:28)\n      at ee.onRequestError (<embedded>:338:108169)\n      at ClientRequest.emit (node:events:531:35)\n      at emitErrorEvent (node:_http_client:105:11)\n      at Socket.socketErrorListener (node:_http_client:518:5)\n      at Socket.emit (node:events:519:28)\n      at emitErrorNT (node:internal/streams/destroy:170:8)\n      at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n      at process.processTicksAndRejections (node:internal/process/task_queues:90:21)",
+                "diff": null
+              },
+              "uuid": "91dca8a6-7f6c-446d-b2c4-84d325dd67c3",
+              "parentUUID": "60139a96-a72a-4449-b2e7-4ca2f6c3805f",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "AT-03: Un administrador no debe poder eliminar su propio usuario",
+              "fullTitle": "Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente AT-03: Un administrador no debe poder eliminar su propio usuario",
+              "timedOut": null,
+              "duration": 731,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.login('admin@test.com', 'password123');\ncy.visit('/dashboard');\ncy.contains('button', 'Usuarios').click();\n// Buscamos la fila del administrador logueado\ncy.contains('tr', 'admin@test.com').within(() => {\n  // Verificamos que el botón de eliminar esté deshabilitado (por la lógica de React)\n  cy.get('button.btn-delete').should('be.disabled');\n});",
+              "err": {},
+              "uuid": "d1c4b630-ecec-4655-85e7-c25ba689c5b2",
+              "parentUUID": "60139a96-a72a-4449-b2e7-4ca2f6c3805f",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "AT-04: Los datos creados deben persistir al recargar la página",
+              "fullTitle": "Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente AT-04: Los datos creados deben persistir al recargar la página",
+              "timedOut": null,
+              "duration": 21810,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.login('admin@test.com', 'password123');\ncy.visit('/dashboard');\ncy.contains('button', 'Usuarios').click();\n// Creamos un usuario rápido\nconst emailPersistente = `persistente_${Date.now()}@test.com`;\ncy.request({\n  method: 'POST',\n  url: 'http://10.1.195.158:3000/api/users/create',\n  // 👈 Asegúrese de usar su IP correcta\n  body: {\n    name: \"Persistente\",\n    lastname: \"Test\",\n    email: emailPersistente,\n    password: \"123\"\n  }\n});\n// Recargamos la página fuertemente\ncy.reload();\ncy.contains('button', 'Usuarios').click();\n// El usuario debe seguir en la tabla (porque está en la BD real)\ncy.get('table').should('contain', emailPersistente);",
+              "err": {
+                "message": "CypressError: `cy.request()` failed trying to load:\n\nhttp://10.1.195.158:3000/api/users/create\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > Error: connect ETIMEDOUT 10.1.195.158:3000\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://10.1.195.158:3000/api/users/create\n\n-----------------------------------------------------------\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed trying to load:\n\nhttp://10.1.195.158:3000/api/users/create\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > Error: connect ETIMEDOUT 10.1.195.158:3000\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://10.1.195.158:3000/api/users/create\n\n-----------------------------------------------------------\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:134875:70)\n    at tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1780:23)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:4176:37)\n    at tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1780:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1492:31)\n    at Promise._settlePromise (http://localhost:5173/__cypress/runner/cypress_runner.js:1549:18)\n    at Promise._settlePromise0 (http://localhost:5173/__cypress/runner/cypress_runner.js:1594:10)\n    at Promise._settlePromises (http://localhost:5173/__cypress/runner/cypress_runner.js:1670:18)\n    at _drainQueueStep (http://localhost:5173/__cypress/runner/cypress_runner.js:2380:12)\n    at _drainQueue (http://localhost:5173/__cypress/runner/cypress_runner.js:2373:9)\n    at Async._drainQueues (http://localhost:5173/__cypress/runner/cypress_runner.js:2389:5)\n    at Async.drainQueues (http://localhost:5173/__cypress/runner/cypress_runner.js:2259:14)\nFrom Your Spec Code:\n    at Object.proxyGetter [as get] (http://localhost:5173/__cypress/runner/cypress_runner.js:81449:22)\n    at exists (http://localhost:5173/__cypress/runner/cypress_runner.js:151554:26)\n    at elExists (http://localhost:5173/__cypress/runner/cypress_runner.js:151569:10)\n    at ensureExistence (http://localhost:5173/__cypress/runner/cypress_runner.js:151750:22)\n    at onFailFn (http://localhost:5173/__cypress/runner/cypress_runner.js:151779:53)\n\nFrom Node.js Internals:\n  RequestError: Error: connect ETIMEDOUT 10.1.195.158:3000\n      at new l (<embedded>:275:86324)\n      at ee.callback (<embedded>:275:92325)\n      at e.callback.s.callback [as _callback] (<embedded>:275:91771)\n      at s._callback.s.callback.s.callback (<embedded>:338:99227)\n      at ee.emit (node:events:519:28)\n      at ee.onRequestError (<embedded>:338:108169)\n      at ClientRequest.emit (node:events:531:35)\n      at emitErrorEvent (node:_http_client:105:11)\n      at Socket.socketErrorListener (node:_http_client:518:5)\n      at Socket.emit (node:events:519:28)\n      at emitErrorNT (node:internal/streams/destroy:170:8)\n      at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n      at process.processTicksAndRejections (node:internal/process/task_queues:90:21)",
+                "diff": null
+              },
+              "uuid": "61d3cbb4-a7eb-447f-b2c2-254933f42e7c",
+              "parentUUID": "60139a96-a72a-4449-b2e7-4ca2f6c3805f",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "AT-05: El usuario debe poder cerrar sesión y limpiar el almacenamiento local",
+              "fullTitle": "Nivel 5: Pruebas de Aceptación (UAT) - Criterios del Cliente AT-05: El usuario debe poder cerrar sesión y limpiar el almacenamiento local",
+              "timedOut": null,
+              "duration": 1810,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.login('admin@test.com', 'password123');\ncy.visit('/dashboard');\n// Hacemos clic en Cerrar Sesión (está en el Header del Dashboard)\ncy.contains('button', 'Cerrar Sesión').click();\n// Verificamos que redirige al login\ncy.url().should('include', '/login');\n// Verificamos que el token y los datos del usuario se borraron\ncy.window().then(win => {\n  expect(win.localStorage.getItem('auth_token')).to.be.null;\n  expect(win.localStorage.getItem('user_data')).to.be.null;\n});",
+              "err": {},
+              "uuid": "a1f97aa8-80b6-4056-b787-cf38b08021cc",
+              "parentUUID": "60139a96-a72a-4449-b2e7-4ca2f6c3805f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "63f17943-d96a-4831-b545-265c994046eb",
+            "d1c4b630-ecec-4655-85e7-c25ba689c5b2",
+            "a1f97aa8-80b6-4056-b787-cf38b08021cc"
+          ],
+          "failures": [
+            "91dca8a6-7f6c-446d-b2c4-84d325dd67c3",
+            "61d3cbb4-a7eb-447f-b2c2-254933f42e7c"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 50475,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "8.1.1"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/html",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}
