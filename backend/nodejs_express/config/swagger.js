@@ -1,3 +1,4 @@
+// backend/nodejs_express/config/swagger.js
 const swaggerJsdoc = require('swagger-jsdoc');
 
 const options = {
@@ -9,89 +10,40 @@ const options = {
       description: 'Documentación completa de la API REST',
       contact: {
         name: 'Albeiro Ramos',
-        email: 'profealbeiro2020@gmail.com'
+        email: 'profealbeiro2020@gmail.com' 
       }
     },
     servers: [
       {
-        url: 'http://192.168.80.19:3000',
-        description: 'Servidor local'
+        url: process.env.NODE_ENV === 'production' 
+             ? 'https://api-project-deploy-g2bufjagbjbqb8dr.chilecentral-01.azurewebsites.net/' 
+             : `http://localhost:${process.env.PORT || 3000}`,
+        description: process.env.NODE_ENV === 'production' ? 'Servidor en Azure' : 'Servidor local'
       }
     ],
     components: {
       securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
+        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }
       },
       schemas: {
         User: {
           type: 'object',
           properties: {
-            id: {
-              type: 'integer',
-              description: 'ID auto-generado'
-            },
-            email: {
-              type: 'string',
-              format: 'email',
-              description: 'Email del usuario'
-            },
-            name: {
-              type: 'string',
-              description: 'Nombre del usuario'
-            },
-            lastname: {
-              type: 'string',
-              description: 'Apellido del usuario'
-            },
-            role: {
-              type: 'string',
-              enum: ['admin', 'seller', 'user'],
-              description: 'Rol del usuario'
-            }
+            id: { type: 'integer' }, email: { type: 'string' }, name: { type: 'string' },
+            lastname: { type: 'string' }, role: { type: 'string', enum: ['admin', 'seller', 'user'] }
           },
-          example: {
-            email: "juan@example.com",
-            name: "Juan",
-            lastname: "Pérez",
-            role: "user"
-          }
+          example: { email: "juan@example.com", name: "Juan", lastname: "Pérez", role: "user" }
         },
         Login: {
-          type: 'object',
-          required: ['email', 'password'],
-          properties: {
-            email: {
-              type: 'string',
-              format: 'email'
-            },
-            password: {
-              type: 'string'
-            }
-          },
-          example: {
-            email: "usuario@example.com",
-            password: "miContraseña123"
-          }
+          type: 'object', required: ['email', 'password'],
+          properties: { email: { type: 'string' }, password: { type: 'string' } },
+          example: { email: "usuario@example.com", password: "miContraseña123" }
         },
-        Error: {
-          type: 'object',
-          properties: {
-            error: {
-              type: 'string'
-            },
-            message: {
-              type: 'string'
-            }
-          }
-        }
+        Error: { type: 'object', properties: { error: { type: 'string' }, message: { type: 'string' } } }
       }
     }
   },
-  apis: ['./routes/*.js'], // Ruta de tus archivos de rutas
+  apis: ['./routes/*.js'],
 };
 
 module.exports = swaggerJsdoc(options);

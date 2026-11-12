@@ -1,4 +1,4 @@
-// server.js
+// backend/nodejs_express/server.js
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
@@ -8,13 +8,16 @@ const usersRoutes = require('./routes/userRoutes');
 
 const app = express();
 
-// Middlewares globales
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: '*', // Permite conexiones desde React y desde Azure
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 
-// Documentación de swagger
 const swaggerOptions = {  
   swaggerOptions: {
     docExpansion: 'list',           
@@ -36,25 +39,22 @@ const swaggerOptions = {
 };
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
-
-// Rutas
 app.use('/api/users', usersRoutes);
 
-// Endpoints de prueba
-app.get('/', (req, res) => {
-    res.send('Ruta raíz del Backend');
-});
+app.get('/', (req, res) => res.send('Ruta raíz del Backend'));
+app.get('/test', (req, res) => res.send('Ruta TEST'));
 
-app.get('/test', (req, res) => {
-    res.send('Ruta TEST');
-});
-
-// Manejo de errores
 app.use((err, req, res, next) => {
     console.log(err);
     res.status(err.status || 500).send(err.stack);
 });
 
-console.log('📚 Swagger disponible en: http://192.168.80.19:3000/api-docs');
+// 👇 LÓGICA DE ARRANQUE PARA AZURE (Solo se ejecuta en Producción)
+if (process.env.NODE_ENV === 'production') {
+  const port = process.env.PORT || 8080;
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`✅ Servidor de AZURE corriendo en el puerto ${port}`);
+  });
+}
 
 module.exports = app;
